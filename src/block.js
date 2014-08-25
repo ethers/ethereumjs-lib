@@ -286,7 +286,11 @@ Block.prototype.get_transaction = function(num) {
 };
 
 Block.prototype.get_transactions = function() {
-    throw new Error('TODO');
+    var txlist = [];
+    this._list_transactions().forEach(function(val) {
+        txlist.push(transaction.create(val[0]));
+    });
+    return txlist;
 };
 
 // Serialization method; should act as perfect inverse function of the
