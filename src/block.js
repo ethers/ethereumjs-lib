@@ -309,6 +309,30 @@ Block.prototype.hex_hash = function() {
     return util.encodeHex(this.hash());
 };
 
+Block.init_from_parent = function(opts) {
+    var parent = opts.parent;
+    var coinbase = opts.coinbase;
+
+    opts.extra_data = opts.extra_data || '';
+    opts.timestamp = opts.timestamp || Math.floor(Date.now() / 1000);
+    opts.uncles = opts.uncles || [];
+
+
+    opts.prevhash = parent.hash;
+    opts.uncles_hash = util.sha3(rlp.encode(opts.uncles));
+    opts.state_root = parent.state.rootHash();
+    opts.tx_list_root = trie.BLANK_ROOT;
+    opts.difficulty = calc_difficulty(parent, opts.timestamp);
+    opts.number = parent.number.add(BigInteger.ONE);
+    opts.min_gas_price = BigInteger.ZERO;
+    opts.gas_limit = calc_gaslimit(parent);
+    opts.gas_used = BigInteger.ZERO;
+    opts.nonce = '';
+    opts.transaction_list = [];
+
+    return new Block(opts);
+}
+
 function genesis(initial_alloc) {
     initial_alloc = initial_alloc || GENESIS_INITIAL_ALLOC;
     // https://ethereum.etherpad.mozilla.org/12
