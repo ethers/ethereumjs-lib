@@ -60,6 +60,14 @@ describe('block', function(){
     });
   });
 
+  describe('#serialize', function(){
+    it('should be correct for a genesis block', function(){
+        var b = block.genesis();
+        var hexSerialized = util.encodeHex(b.serialize());
+        hexSerialized.should.equal(genesisData.genesis_rlp_hex);
+    });
+  });
+
   describe('#get_balance', function(){
     it('should be correct for a genesis block', function(){
       var b = block.genesis();
