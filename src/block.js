@@ -341,6 +341,17 @@ function calc_difficulty(parent, timestamp) {
     return parent.difficulty.add( offset.multiply(sign) );
 }
 
+function calc_gaslimit(parent) {
+    var prior_contribution = parent.gas_limit.multiply(
+                            GASLIMIT_EMA_FACTOR.subtract(BigInteger.ONE));
+    var new_contribution = parent.gas_used
+                                .multiply(BLKLIM_FACTOR_NOM)
+                                .divide(BLKLIM_FACTOR_DEN);
+    var gl = (prior_contribution.add(new_contribution))
+                                .divide(GASLIMIT_EMA_FACTOR);
+    return gl.max(MIN_GAS_LIMIT);
+}
+
 function genesis(initial_alloc) {
     initial_alloc = initial_alloc || GENESIS_INITIAL_ALLOC;
     // https://ethereum.etherpad.mozilla.org/12
