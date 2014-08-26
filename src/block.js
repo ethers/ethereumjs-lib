@@ -352,6 +352,21 @@ Block.init_from_parent = function(opts) {
     return new Block(opts);
 };
 
+Block.deserialize_header = function(header_data) {
+    if (util.isString(header_data)) {
+        header_data = rlp.decode(header_data);
+    }
+    //assert len(header_data) == len(block_structure)
+    var kargs = {};
+    // Deserialize all properties
+    block_structure.forEach(function(v, i) {
+        var name = v[0];
+        var typ = v[1];
+        kargs[name] = util.decoders[typ](header_data[i]);
+    });
+    return kargs;
+};
+
 
 function calc_difficulty(parent, timestamp) {
     var offset = parent.difficulty.divide(BLOCK_DIFF_FACTOR);
