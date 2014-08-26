@@ -189,6 +189,17 @@ var util = (function() {
         return Array(n+1).join(string);
     }
 
+    var denoms = {
+        wei: BigInteger.ONE,
+        babbage: BigInteger('10').pow(3),
+        lovelace: BigInteger('10').pow(6),
+        shannon: BigInteger('10').pow(9),
+        szabo: BigInteger('10').pow(12),
+        finney: BigInteger('10').pow(15),
+        ether: BigInteger('10').pow(18),
+        turing: BigInteger('2').pow(256),
+    };
+
     return {
         sha3: sha3,
         privToAddr: privToAddr,
@@ -203,6 +214,7 @@ var util = (function() {
         encode_int: encode_int,
         decoders: decoders,
         encoders: encoders,
+        denoms: denoms,
         repeat: repeat
     };
 })();
