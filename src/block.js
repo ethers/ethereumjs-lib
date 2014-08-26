@@ -12,8 +12,8 @@ var MIN_GAS_LIMIT = BigInteger('125000');
 var GASLIMIT_EMA_FACTOR = BigInteger('1024');
 var BLOCK_REWARD = BigInteger('1500').multiply(util.denoms.finney);
 var UNCLE_REWARD = BigInteger('3').multiply(BLOCK_REWARD)
-                                    .divide(BigInteger('4');
-var NEPHEW_REWARD = BLOCK_REWARD.divide(BigInteger('8');
+                                    .divide(BigInteger('4'));
+var NEPHEW_REWARD = BLOCK_REWARD.divide(BigInteger('8'));
 var BLOCK_DIFF_FACTOR = BigInteger('1024');
 var GENESIS_MIN_GAS_PRICE = BigInteger.ZERO;
 var BLKLIM_FACTOR_NOM = BigInteger('6');
@@ -313,20 +313,18 @@ Block.prototype.hex_hash = function() {
     return util.encodeHex(this.hash());
 };
 
-/*
-TODO
-Apply rewards
-We raise the block's coinbase account by Rb, the block reward,
-and the coinbase of each uncle by 7 of 8 that.
-Rb = 1500 finney
-*/
+
+// Apply rewards to block and uncles
 Block.prototype.finalize = function() {
-    this.delta_balance(this.coinbase,
-                           BLOCK_REWARD + NEPHEW_REWARD * len(self.uncles))
-    for uncle_rlp in self.uncles:
-        uncle_data = Block.deserialize_header(uncle_rlp)
-        self.delta_balance(uncle_data['coinbase'], UNCLE_REWARD)
-    self.commit_state()
+    var reward = BLOCK_REWARD.add(
+                NEPHEW_REWARD.multiply(BigInteger(''+this.uncles.length)));
+    this.delta_balance(this.coinbase, reward);
+    this.uncles.forEach(function(uncle_rlp) {
+        var uncle_data = Block.deserialize_header(uncle_rlp);
+        this.delta_balance(uncle_data.coinbase, UNCLE_REWARD);
+    });
+    //TODO
+    //this.commit_state()
 };
 
 Block.init_from_parent = function(opts) {
@@ -352,7 +350,7 @@ Block.init_from_parent = function(opts) {
     opts.transaction_list = [];
 
     return new Block(opts);
-}
+};
 
 
 function calc_difficulty(parent, timestamp) {
