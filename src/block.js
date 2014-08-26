@@ -314,7 +314,8 @@ Block.init_from_parent = function(opts) {
     var coinbase = opts.coinbase;
 
     opts.extra_data = opts.extra_data || '';
-    opts.timestamp = opts.timestamp || Math.floor(Date.now() / 1000);
+    opts.timestamp = opts.timestamp ||
+                        BigInteger(''+Math.floor(Date.now() / 1000));
     opts.uncles = opts.uncles || [];
 
 
@@ -336,7 +337,7 @@ Block.init_from_parent = function(opts) {
 
 function calc_difficulty(parent, timestamp) {
     var offset = parent.difficulty.divide(BLOCK_DIFF_FACTOR);
-    var sign = (timestamp - parent.timestamp < 42) ?
+    var sign = (timestamp.intValue() - parent.timestamp.intValue() < 42) ?
                         BigerInteger.ONE : BigerInteger.ONE.negate();
     return parent.difficulty.add( offset.multiply(sign) );
 }
