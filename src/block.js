@@ -333,6 +333,14 @@ Block.init_from_parent = function(opts) {
     return new Block(opts);
 }
 
+
+function calc_difficulty(parent, timestamp) {
+    var offset = parent.difficulty.divide(BLOCK_DIFF_FACTOR);
+    var sign = (timestamp - parent.timestamp < 42) ?
+                        BigerInteger.ONE : BigerInteger.ONE.negate();
+    return parent.difficulty.add( offset.multiply(sign) );
+}
+
 function genesis(initial_alloc) {
     initial_alloc = initial_alloc || GENESIS_INITIAL_ALLOC;
     // https://ethereum.etherpad.mozilla.org/12
