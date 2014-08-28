@@ -391,20 +391,22 @@ function calc_gaslimit(parent) {
     return gl.max(MIN_GAS_LIMIT);
 }
 
-function genesis(initial_alloc) {
+function genesis(initial_alloc, difficulty) {
     initial_alloc = initial_alloc || GENESIS_INITIAL_ALLOC;
+    difficulty = difficulty || INITIAL_DIFFICULTY;
     // https://ethereum.etherpad.mozilla.org/12
     var block = new Block({
         prevhash: GENESIS_PREVHASH,
         coinbase: GENESIS_COINBASE,
         tx_list_root: trie.BLANK_ROOT,
-        difficulty: INITIAL_DIFFICULTY,
+        difficulty: difficulty,
         nonce: GENESIS_NONCE,
         gas_limit: GENESIS_GAS_LIMIT
     });
     for (var addr in initial_alloc) {
         block.set_balance(addr, initial_alloc[addr]);
     }
+    // TODO block.state.db.commit()
     return block;
 }
 

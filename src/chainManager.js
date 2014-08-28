@@ -1,7 +1,7 @@
 var util = require('./util');
 var block = require('./block');
 var BigInteger = require('./jsbn/jsbn');
-var jspack = require('../vendor/jspack/jspack');
+var jspack = require('./vendor/jspack/jspack');
 
 var Miner = function(opts) {
     var parent = opts.parent;
