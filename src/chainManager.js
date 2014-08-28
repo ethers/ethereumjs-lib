@@ -1,6 +1,7 @@
 var util = require('./util');
 var block = require('./block');
 var BigInteger = require('./jsbn/jsbn');
+var jspack = require('../vendor/jspack/jspack');
 
 var Miner = function(opts) {
     var parent = opts.parent;
@@ -38,7 +39,7 @@ Miner.prototype.mine = function(steps) {
     var stopLoop = this.nonce.intValue() + steps;
     for (var nonce = this.nonce.intValue(); nonce < stopLoop; nonce++) {
         // TODO will we need to keep nonce as BigInteger?
-        var nonce_bin = nonce_bin_prefix + struct.pack('>q', nonce);
+        var nonce_bin = nonce_bin_prefix + jspack.pack('>q', nonce);
         // BE(SHA3(SHA3(RLP(Hn)) o n))
         var h = util.sha3(util.sha3(rlp_Hn) + nonce_bin);
         var l256 = util.bigEndianToInt(h);
