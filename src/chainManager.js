@@ -35,13 +35,14 @@ Miner.prototype.mine = function(steps) {
     var target = TWO_POW_256.divide(this.block.difficulty);
     var rlp_Hn = this.block.serialize_header_without_nonce();
 
-    var stopLoop = this.nonce + steps;
-    for (var nonce = this.nonce; nonce < stopLoop; nonce++) {
-        var nonce_bin = nonce_bin_prefix + struct.pack('>q', nonce)
+    var stopLoop = this.nonce.intValue() + steps;
+    for (var nonce = this.nonce.intValue(); nonce < stopLoop; nonce++) {
+        // TODO will we need to keep nonce as BigInteger?
+        var nonce_bin = nonce_bin_prefix + struct.pack('>q', nonce);
         // BE(SHA3(SHA3(RLP(Hn)) o n))
         var h = util.sha3(util.sha3(rlp_Hn) + nonce_bin);
         var l256 = util.bigEndianToInt(h);
-        if (l256 < target) {
+        if (l256.compareTo(target) < 0) {
             this.block.nonce = nonce_bin;
 //            assert self.block.check_proof_of_work(self.block.nonce) is True
 //            assert self.block.get_parent()
@@ -53,7 +54,7 @@ Miner.prototype.mine = function(steps) {
 
     this.nonce = nonce;
     return false;
-}
+};
 
 module.exports = {
     Miner: Miner
