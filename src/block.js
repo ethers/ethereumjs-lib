@@ -327,6 +327,11 @@ Block.prototype.finalize = function() {
     //this.commit_state()
 };
 
+Block.prototype.serialize_header_without_nonce = function() {
+    return rlp.encode(this.list_header(['nonce']));
+};
+
+
 Block.init_from_parent = function(opts) {
     var parent = opts.parent;
     var coinbase = opts.coinbase;
