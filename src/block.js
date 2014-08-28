@@ -376,7 +376,7 @@ Block.deserialize_header = function(header_data) {
 function calc_difficulty(parent, timestamp) {
     var offset = parent.difficulty.divide(BLOCK_DIFF_FACTOR);
     var sign = (timestamp.intValue() - parent.timestamp.intValue() < 42) ?
-                        BigerInteger.ONE : BigerInteger.ONE.negate();
+                        BigInteger.ONE : BigInteger.ONE.negate();
     return parent.difficulty.add( offset.multiply(sign) );
 }
 

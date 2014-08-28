@@ -13,7 +13,11 @@ function mine_next_block(parent, uncles, coinbase, transactions) {
 
     // advance one block
     coinbase = coinbase || parent.coinbase;
-    var m = new chainmanager.Miner(parent, uncles, coinbase);
+    var m = new chainManager.Miner({
+        parent: parent,
+        uncles: uncles,
+        coinbase: coinbase
+    });
     transactions.forEach(function(tx) {
         m.add_transaction(tx);
     });
@@ -24,7 +28,7 @@ function mine_next_block(parent, uncles, coinbase, transactions) {
 
 function accounts() {
     var k = util.sha3('cow');
-    var v = util.privtoaddr(k);
+    var v = util.privToAddr(k);
     var k2 = util.sha3('horse');
     var v2 = util.privToAddr(k2);
     return {
@@ -41,7 +45,7 @@ function mkquickgenesis(initial_alloc) {
 }
 
 describe('chain', function(){
-    it.skip('mine block', function(){
+    it('mine block', function(){
         var acc = accounts();
         var k = acc.k, v = acc.v, k2 = acc.k2, v2 = acc.v2;
 //        set_db()
