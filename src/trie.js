@@ -127,6 +127,7 @@ Trie.prototype._rlp_decode = function(node) {
     } else if (node.length < 32) {
         return node;
     } else {
+console.log('@@@ this.db.get(node): ', this.db.get(node))
         return rlp.decode(this.db.get(node));
     }
 };
@@ -146,7 +147,7 @@ Trie.prototype.rootHash = function() {
     if (this.root === BLANK_NODE) {
         return BLANK_ROOT;
     }
-
+console.log('@@@ root', this._rlp_decode(this.root))
     var rlpRoot = rlp.encode(this._rlp_decode(this.root));
     return util.sha3(rlpRoot);
 };

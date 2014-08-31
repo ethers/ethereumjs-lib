@@ -106,4 +106,15 @@ describe('block', function(){
       b.get_balance(toAddr).compareTo(balance).should.equal(0);
     });
   });
+
+  describe('#init_from_parent', function(){
+    it.only('should be correct for a genesis block', function(){
+      var b = block.genesis();
+      var b2 = block.Block.init_from_parent({
+          parent: b,
+          coinbase: '51ba59315b3a95761d0863b05ccc7a7f54703d99'
+      });
+      b2.state_root().should.equal('123');
+    });
+  });
 });
