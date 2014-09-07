@@ -4,7 +4,7 @@ var trie = require('./trie');
 var db = require('./db');
 var Database = db.Db;
 var BigInteger = require('./jsbn/jsbn');
-var leveljs = require('level-js');
+var level = require('level-browserify');
 
 var INITIAL_DIFFICULTY = BigInteger('2').pow(22);
 var GENESIS_PREVHASH = util.repeat('\x00', 32);
@@ -80,7 +80,7 @@ acct_structure.forEach(function(v, i) {
 });
 
 
-var stateDb = new Database(leveljs('stateDb'));
+var stateDb = new Database(level('stateDb'));
 
 var Block = function(opts) {
     opts = opts || {};
