@@ -25,7 +25,7 @@ Trie.prototype._dbget = function(v) {
     if (!v) return BLANK_NODE;
     if (!util.isString(v) || v.length < 32) return v.slice();
     var n = this.db.get(v);
-    return n ? rlp.decode(n) : null;
+    return n ? rlp.decode(n) : BLANK_NODE;
 };
 
 Trie.prototype._dbset = function(v) {
