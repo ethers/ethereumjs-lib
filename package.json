@@ -37,5 +37,8 @@
   "author": {
     "name": "Ethereum",
     "url": "http://ethereum.org"
+  },
+  "dependencies": {
+    "suspend": "^0.5.1"
   }
 }

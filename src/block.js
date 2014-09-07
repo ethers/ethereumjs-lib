@@ -1,7 +1,9 @@
 var util = require('./util');
 var rlp = require('./rlp');
 var trie = require('./trie');
+var Db = require('./db');
 var BigInteger = require('./jsbn/jsbn');
+var leveljs = require('level-js');
 
 var INITIAL_DIFFICULTY = BigInteger('2').pow(22);
 var GENESIS_PREVHASH = util.repeat('\x00', 32);
@@ -77,6 +79,8 @@ acct_structure.forEach(function(v, i) {
 });
 
 
+var stateDb = new Db(leveljs('stateDb'));
+
 var Block = function(opts) {
     opts = opts || {};
     this.prevhash = opts.prevhash || GENESIS_PREVHASH;
@@ -98,11 +102,11 @@ var Block = function(opts) {
     var transaction_list = opts.transaction_list || [];
 
     // TODO persistent trie
-    this.transactions = new trie.Trie(undefined, tx_list_root);
+    this.transactions = new trie.Trie(stateDb, tx_list_root);
     this.transaction_count = BigInteger.ZERO;
 
     // TODO persistent trie
-    this.state = new trie.Trie(undefined, state_root);
+    this.state = new trie.Trie(stateDb, state_root);
 
     if (transaction_list.length > 0) {
         // support init with transactions only if state is known
