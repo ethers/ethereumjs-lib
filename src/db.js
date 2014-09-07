@@ -7,11 +7,11 @@ var Db = function(db) {
 }
 
 Db.prototype.get = function(key) {
-    this.db.get(key, suspend.resume());
+    return this.db.get(key, suspend.resume());
 }
 
 Db.prototype.set = function(key, val) {
-    this.db.put(key, val, suspend.resume());
+    return this.db.put(key, val, suspend.resume());
 }
 
 module.exports = {
