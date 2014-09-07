@@ -1,7 +1,8 @@
 var util = require('./util');
 var rlp = require('./rlp');
 var trie = require('./trie');
-var Db = require('./db');
+var db = require('./db');
+var Database = db.Db;
 var BigInteger = require('./jsbn/jsbn');
 var leveljs = require('level-js');
 
@@ -79,7 +80,7 @@ acct_structure.forEach(function(v, i) {
 });
 
 
-var stateDb = new Db(leveljs('stateDb'));
+var stateDb = new Database(leveljs('stateDb'));
 
 var Block = function(opts) {
     opts = opts || {};

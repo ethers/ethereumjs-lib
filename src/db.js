@@ -2,7 +2,7 @@ var suspend = require('suspend');
 
 // db param has interface of leveldown API
 // (https://github.com/rvagg/node-leveldown)
-function Db(db) {
+var Db = function(db) {
     this.db = db;
 }
 

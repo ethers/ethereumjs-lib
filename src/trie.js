@@ -1,7 +1,6 @@
 var convert = require('./convert'),
     util = require('./util'),
-    rlp = require('./rlp'),
-    leveljs = require('../src/vendor/level.js/levelDotJs');
+    rlp = require('./rlp');
 
 var BLANK_NODE = '';
 var BLANK_ROOT = '';
