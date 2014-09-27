@@ -102,6 +102,9 @@ var Block = function(opts) {
 
     var transaction_list = opts.transaction_list || [];
 
+console.log('@@@ block ctr opts: ', opts)
+console.log('@@@ state_root: ', state_root, 'tx_list_root: ', tx_list_root)
+    
     // TODO persistent trie
     this.transactions = new trie.Trie(stateDb, tx_list_root);
     this.transaction_count = BigInteger.ZERO;
@@ -403,6 +406,7 @@ function genesis(initial_alloc, difficulty) {
     var block = new Block({
         prevhash: GENESIS_PREVHASH,
         coinbase: GENESIS_COINBASE,
+        state_root: trie.BLANK_ROOT,
         tx_list_root: trie.BLANK_ROOT,
         difficulty: difficulty,
         nonce: GENESIS_NONCE,

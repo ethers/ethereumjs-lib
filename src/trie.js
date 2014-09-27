@@ -18,22 +18,23 @@ var BasicDB = function() {
 
 var Trie = function(db, node) {
     this.root = node || BLANK_NODE;
+console.log('@@@ Trie ctr this.root: ', this.root, 'node: ', node, 'BLANK_NODE: ', BLANK_NODE)    
     this.db = db || new BasicDB();
 };
 
-Trie.prototype._dbget = function(v) {
+Trie.prototype._dbget = function*(v) {
     if (!v) return BLANK_NODE;
     if (!util.isString(v) || v.length < 32) return v.slice();
-    var n = this.db.get(v);
+    var n = yield this.db.get(v);
     return n ? rlp.decode(n) : BLANK_NODE;
 };
 
-Trie.prototype._dbset = function(v) {
+Trie.prototype._dbset = function*(v) {
     if (!v) return BLANK_NODE;
     var rlp_node = rlp.encode(v);
     if (rlp_node.length < 32) return v.slice(0);
     var h = util.sha3(rlp_node);
-    this.db.set(h, rlp_node);
+    yield this.db.set(h, rlp_node);
     return h;
 };
 
@@ -118,7 +119,7 @@ Trie.prototype._update = function(node, path, value) {
     return this._dbset(node);
 };
 
-Trie.prototype._rlp_decode = function(node) {
+Trie.prototype._rlp_decode = function*(node) {
     if (!util.isString(node)) {
         return node;
     } else if (node.length === 0) {
@@ -126,8 +127,9 @@ Trie.prototype._rlp_decode = function(node) {
     } else if (node.length < 32) {
         return node;
     } else {
-console.log('@@@ this.db.get(node): ', this.db.get(node))
-        return rlp.decode(this.db.get(node));
+        var gotNode = yield this.db.get(node);
+console.log('@@@ node: ', node, 'gotNode: ', gotNode)
+        return rlp.decode(gotNode);
     }
 };
 
@@ -138,6 +140,7 @@ Trie.prototype.get = function(k) {
 
 Trie.prototype.update = function(k,v) {
     var key = compactHexDecode(k).concat([16]);
+console.log('@@@ update() root: ', this.root)
     this.root = this._update(this.root, key, v);
 };
 
